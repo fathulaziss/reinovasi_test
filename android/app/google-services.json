@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812997353807",
+    "project_id": "reinovasi-test",
+    "storage_bucket": "reinovasi-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812997353807:android:8678110457db2e6b0e653a",
+        "android_client_info": {
+          "package_name": "com.example.reinovasi_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812997353807-pplhfid98pk6si5katj737jrtehi88ai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6dqP6XH1j8_7dE0nc8qGl0p4olsxqnCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812997353807-pplhfid98pk6si5katj737jrtehi88ai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
