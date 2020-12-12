@@ -5,10 +5,7 @@ class AddData {
   String address;
   String gender;
   String phoneNum;
+  String date;
 
-  AddData(
-      {this.fullName = "",
-      this.address = "",
-      this.gender = "",
-      this.phoneNum = ""});
+  AddData({this.fullName, this.address, this.gender, this.phoneNum, this.date});
 }

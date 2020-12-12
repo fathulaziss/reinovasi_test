@@ -11,14 +11,34 @@ class AddDataPage extends StatefulWidget {
 
 class _AddDataPageState extends State<AddDataPage> {
   CrudMethods crudMethods = new CrudMethods();
+  List gender = ['Male', 'Female'];
+  String genderVal;
+  DateTime currentDate = new DateTime.now();
+  Future<Null> selectedDate(BuildContext context) async {
+    final DateTime selDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(1990),
+        lastDate: DateTime(2021),
+        builder: (context, child) {
+          return SingleChildScrollView(
+            child: child,
+          );
+        });
+    if (selDate != null) {
+      setState(() {
+        currentDate = selDate;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController addressController = TextEditingController();
-    TextEditingController genderController = TextEditingController();
     TextEditingController phoneNumController = TextEditingController();
     bool isLoading = false;
+    String formatedDate = new DateFormat.yMMMd().format(currentDate);
 
     return WillPopScope(
         onWillPop: () async {
@@ -152,13 +172,64 @@ class _AddDataPageState extends State<AddDataPage> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(color: Colors.black)),
-                                child: TextField(
-                                  controller: genderController,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: GoogleFonts.poppins(
-                                          color: "8D92A3".toColor()),
-                                      hintText: 'ex: Male / Female'),
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  underline: SizedBox(),
+                                  hint: Text(
+                                    'Select Your Genre',
+                                    style: GoogleFonts.poppins(
+                                        color: "8D92A3".toColor()),
+                                  ),
+                                  value: genderVal,
+                                  style:
+                                      GoogleFonts.poppins(color: Colors.black),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      genderVal = value;
+                                    });
+                                  },
+                                  items: gender.map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 6, bottom: 6),
+                                child: Text(
+                                  "Birthday",
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 45,
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.black)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '$formatedDate',
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.black),
+                                    ),
+                                    GestureDetector(
+                                      child: Icon(Icons.calendar_today),
+                                      onTap: () {
+                                        selectedDate(context);
+                                      },
+                                    )
+                                  ],
                                 ),
                               ),
                               Container(
@@ -180,6 +251,7 @@ class _AddDataPageState extends State<AddDataPage> {
                                     border: Border.all(color: Colors.black)),
                                 child: TextField(
                                   controller: phoneNumController,
+                                  keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintStyle: GoogleFonts.poppins(
@@ -198,11 +270,11 @@ class _AddDataPageState extends State<AddDataPage> {
                                       )
                                     : RaisedButton(
                                         onPressed: () {
-                                          if (!(nameController.text.trim() != "" &&
+                                          if (!(nameController.text.trim() !=
+                                                  "" &&
                                               addressController.text.trim() !=
                                                   "" &&
-                                              genderController.text.trim() !=
-                                                  "" &&
+                                              genderVal != "" &&
                                               phoneNumController.text.trim() !=
                                                   "")) {
                                             Flushbar(
@@ -220,15 +292,14 @@ class _AddDataPageState extends State<AddDataPage> {
                                                 nameController.text;
                                             widget.addData.address =
                                                 addressController.text;
-                                            widget.addData.gender =
-                                                genderController.text;
                                             widget.addData.phoneNum =
                                                 phoneNumController.text;
 
                                             Map<String, dynamic> data = {
                                               'name': widget.addData.fullName,
                                               'address': widget.addData.address,
-                                              'gender': widget.addData.gender,
+                                              'gender': genderVal,
+                                              'date': formatedDate,
                                               'phoneNum':
                                                   widget.addData.phoneNum
                                             };

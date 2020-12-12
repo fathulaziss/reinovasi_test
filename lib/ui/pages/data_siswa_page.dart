@@ -6,6 +6,26 @@ class DataSiswa extends StatefulWidget {
 }
 
 class _DataSiswaState extends State<DataSiswa> {
+  List dataSiswaList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic result = await CrudMethods().getData();
+
+    if (result == null) {
+      print('Data siswa tidak tersedia');
+    } else {
+      setState(() {
+        dataSiswaList = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -14,77 +34,41 @@ class _DataSiswaState extends State<DataSiswa> {
           return;
         },
         child: Scaffold(
-          body: Stack(
-            children: [
-              Container(
-                color: Colors.white,
-              ),
-              SafeArea(
-                child: ListView(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          width: double.infinity,
-                          height: 100,
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  context.bloc<PageBloc>().add(GoToMainPage());
-                                  return;
-                                },
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  margin: EdgeInsets.only(right: 26),
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/back_arrow.png'))),
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Data Siswa",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          color: "FAFAFC".toColor(),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.fromLTRB(24, 26, 24, 6),
-                          color: Colors.white,
-                          child: Column(
-                            children: [
-                              Container(
-                                  width: double.infinity,
-                                  margin: EdgeInsets.only(bottom: 6),
-                                  child: Text("Data Siswa")),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
+            body: Container(
+                child: ListView.builder(
+                    itemCount: dataSiswaList.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(24, 26, 24, 10),
+                        width: double.infinity,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            color: Colors.green[200],
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 3,
+                                  blurRadius: 15,
+                                  color: Colors.black26)
+                            ]),
+                        child: Container(
+                            padding:
+                                EdgeInsets.only(left: 14, right: 14, top: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Name : " + dataSiswaList[index]['name']),
+                                Text("Address : " +
+                                    dataSiswaList[index]['address']),
+                                Text("Birthday : " +
+                                    dataSiswaList[index]['date']),
+                                Text("Gender : " +
+                                    dataSiswaList[index]['gender']),
+                                Text("Phone Number : " +
+                                    dataSiswaList[index]['phoneNum'])
+                              ],
+                            )),
+                      );
+                    }))));
   }
 }
